@@ -14,113 +14,138 @@ class FirstScreen extends StatefulWidget {
   _FirstScreenState createState() => _FirstScreenState();
 }
 
+Future<bool> _exitApp(BuildContext context) {
+  return showDialog(
+        context: context,
+        child: new AlertDialog(
+          title: new Text('Do you want to exit this application?'),
+          content: new Text('We hate to see you leave...'),
+          actions: <Widget>[
+            new FlatButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: new Text('No'),
+            ),
+            new FlatButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: new Text('Yes'),
+            ),
+          ],
+        ),
+      ) ??
+      false;
+}
+
 class _FirstScreenState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Icon(Icons.menu),
-        backgroundColor: Colors.black87,
-        title: Text(
-          'FinTrack',
-          textAlign: TextAlign.center,
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: FlatButton(
-              child: Row(
-                children: [
-                  Text(
-                    'Logout',
-                    style: TextStyle(
-                        fontFamily: 'Rubik',
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Icon(
-                    Icons.logout,
-                    color: Colors.white,
-                  ),
-                ],
+    return WillPopScope(
+      onWillPop: () => _exitApp(context),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Icon(Icons.menu),
+          backgroundColor: Colors.black87,
+          title: Text(
+            'FinTrack',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: FlatButton(
+                child: Row(
+                  children: [
+                    Text(
+                      'Logout',
+                      style: TextStyle(
+                          fontFamily: 'Rubik',
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  signOutGoogle();
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) {
+                    return MyApp();
+                  }), ModalRoute.withName('/'));
+                },
               ),
-              onPressed: () {
-                signOutGoogle();
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) {
-                  return MyApp();
-                }), ModalRoute.withName('/'));
-              },
+            ),
+          ],
+        ),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.black, Colors.black],
             ),
           ),
-        ],
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.black, Colors.black],
-          ),
+          child: ListView(children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CardWidget(
+                          title: '',
+                          image: 'images/income.jpg',
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SecondScreen()));
+                          },
+                        ),
+                        CardWidget(
+                          title: '',
+                          image: 'images/investment.jpg',
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SecondScreen()));
+                          },
+                        ),
+                        CardWidget(
+                          title: '',
+                          image: 'images/debt.jpg',
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SecondScreen()));
+                          },
+                        ),
+                      ]),
+                ),
+              ],
+            ),
+          ]),
         ),
-        child: ListView(children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CardWidget(
-                        title: '',
-                        image: 'images/income.jpg',
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      SecondScreen()));
-                        },
-                      ),
-                      CardWidget(
-                        title: '',
-                        image: 'images/investment.jpg',
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      SecondScreen()));
-                        },
-                      ),
-                      CardWidget(
-                        title: '',
-                        image: 'images/debt.jpg',
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      SecondScreen()));
-                        },
-                      ),
-                    ]),
-              ),
-            ],
-          ),
-        ]),
-      ),
-      bottomNavigationBar: ConvexAppBar(
-        items: [
-          TabItem(icon: Icons.account_balance_wallet_rounded, title: 'Balance'),
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(
-              icon: Icons.person_rounded,
-              title: googleSignIn.currentUser.displayName),
-        ],
-        initialActiveIndex: 1,
-        backgroundColor: Colors.black87,
+        bottomNavigationBar: ConvexAppBar(
+          items: [
+            TabItem(
+                icon: Icons.account_balance_wallet_rounded, title: 'Balance'),
+            TabItem(icon: Icons.home, title: 'Home'),
+            TabItem(
+                icon: Icons.person_rounded,
+                title: googleSignIn.currentUser.displayName),
+          ],
+          initialActiveIndex: 1,
+          backgroundColor: Colors.black87,
+        ),
       ),
     );
   }
