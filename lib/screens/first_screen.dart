@@ -65,7 +65,7 @@ class MainCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CardWidget(
-      title: 'Hello',
+      title: 'Helloo',
       onPressed: () {
         Navigator.push(
             context,
