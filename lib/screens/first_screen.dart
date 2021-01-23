@@ -1,4 +1,8 @@
+import 'package:bill_split/main.dart';
+import 'package:bill_split/screens/login_page.dart';
 import 'package:bill_split/screens/second_screen.dart';
+import 'package:bill_split/services/auth-service/google_signin.dart';
+import 'package:bill_split/utilities/button_builder.dart';
 import 'package:bill_split/utilities/card_widget.dart';
 import 'package:bill_split/utilities/contants.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
@@ -11,18 +15,52 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
-  List<Widget> mainCard = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: kAppBar,
+      appBar: AppBar(
+        leading: Icon(Icons.menu),
+        backgroundColor: Colors.black87,
+        title: Text(
+          'FinTrack',
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: FlatButton(
+              child: Row(
+                children: [
+                  Text(
+                    'Logout',
+                    style: TextStyle(
+                        fontFamily: 'Rubik',
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+              onPressed: () {
+                signOutGoogle();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) {
+                  return MyApp();
+                }), ModalRoute.withName('/'));
+              },
+            ),
+          ),
+        ],
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Colors.black, Colors.black87],
+            colors: [Colors.black, Colors.black],
           ),
         ),
         child: ListView(children: <Widget>[
@@ -32,9 +70,42 @@ class _FirstScreenState extends State<FirstScreen> {
             children: [
               Expanded(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: mainCard,
-                ),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CardWidget(
+                        title: '',
+                        image: 'images/income.jpg',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SecondScreen()));
+                        },
+                      ),
+                      CardWidget(
+                        title: '',
+                        image: 'images/investment.jpg',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SecondScreen()));
+                        },
+                      ),
+                      CardWidget(
+                        title: '',
+                        image: 'images/debt.jpg',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SecondScreen()));
+                        },
+                      ),
+                    ]),
               ),
             ],
           ),
@@ -42,36 +113,15 @@ class _FirstScreenState extends State<FirstScreen> {
       ),
       bottomNavigationBar: ConvexAppBar(
         items: [
+          TabItem(icon: Icons.account_balance_wallet_rounded, title: 'Balance'),
           TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.map, title: 'Discovery'),
+          TabItem(
+              icon: Icons.person_rounded,
+              title: googleSignIn.currentUser.displayName),
         ],
-        initialActiveIndex: 0, //optional, default as 0
+        initialActiveIndex: 1,
+        backgroundColor: Colors.black87,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            mainCard.add(MainCardWidget());
-          });
-        },
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class MainCardWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return CardWidget(
-      title: 'Helloo',
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => SecondScreen()));
-      },
     );
   }
 }

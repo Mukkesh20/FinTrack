@@ -8,48 +8,33 @@ GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
 
 class CardWidget extends StatelessWidget {
   final title;
+  final image;
   final onPressed;
-  const CardWidget({this.title, this.onPressed});
+  const CardWidget({this.title, this.image, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 15.0, horizontal: 12.0),
-      elevation: 5.0,
+      elevation: 0.0,
       clipBehavior: Clip.antiAlias,
       child: FlatButton(
-        padding: EdgeInsets.all(1),
+        padding: EdgeInsets.all(0),
         onPressed: onPressed,
-        child: GradientCard(
-          gradient: Gradients.blush,
-          shadowColor: Gradients.cosmicFusion.colors.last.withOpacity(1),
-          elevation: 2,
-          child: Column(
-            children: [
-              ListTile(
-                title: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: kCardHeadingTextStyle,
-                ),
-                subtitle: Text(
-                  'Secondary Text',
-                  style: TextStyle(color: Colors.black),
-                ),
+        child: Stack(
+          children: [
+            Image.asset(
+              image,
+              fit: BoxFit.fill,
+            ),
+            Center(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: kCardHeadingTextStyle,
               ),
-              Image.asset(
-                'assets/google_logo.png',
-                scale: 10.0,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

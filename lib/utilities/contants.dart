@@ -1,4 +1,3 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -16,18 +15,25 @@ const kCardHeadingTextStyle = TextStyle(
   ],
 );
 
-AppBar kAppBar = AppBar(
-  leading: Icon(Icons.menu),
-  title: Text('Page title'),
-  actions: [
-    Icon(Icons.favorite),
-    Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Icon(Icons.search),
-    ),
-    Icon(Icons.more_vert),
-  ],
-);
+// AppBar kAppBar = AppBar(
+//   leading: Icon(Icons.menu),
+//   backgroundColor: Colors.teal,
+//   title: Text('FinTrack'),
+//   actions: [
+//     Icon(Icons.favorite),
+//     Padding(
+//       padding: EdgeInsets.symmetric(horizontal: 16),
+//       child: roundButton(buttonText: 'Logout',onPressed:() {
+//         signOutGoogle();
+//         Navigator.of(context).pushAndRemoveUntil(
+//             MaterialPageRoute(builder: (context) {
+//               return LoginPage();
+//             }), ModalRoute.withName('/'));
+//       }, ),
+//     ),
+//     Icon(Icons.more_vert),
+//   ],
+// );
 
 ConvexAppBar kBottomNavyBar = ConvexAppBar(
   items: [
@@ -40,3 +46,25 @@ ConvexAppBar kBottomNavyBar = ConvexAppBar(
   initialActiveIndex: 2, //optional, default as 0
   onTap: (int i) => print('click index=$i'),
 );
+
+// RaisedButton(
+// onPressed: () {
+// signOutGoogle();
+// Navigator.of(context).pushAndRemoveUntil(
+// MaterialPageRoute(builder: (context) {
+// return LoginPage();
+// }), ModalRoute.withName('/'));
+// },
+// color: Colors.deepPurple,
+// child: Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Text(
+// 'Sign Out',
+// style: TextStyle(fontSize: 25, color: Colors.white),
+// ),
+// ),
+// elevation: 5,
+// shape: RoundedRectangleBorder(
+// borderRadius: BorderRadius.circular(40),
+// ),
+// ),

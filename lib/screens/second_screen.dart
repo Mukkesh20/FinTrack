@@ -2,7 +2,14 @@ import 'package:bill_split/utilities/card_widget.dart';
 import 'package:bill_split/utilities/contants.dart';
 import 'package:flutter/material.dart';
 
-class SecondScreen extends StatelessWidget {
+class SecondScreen extends StatefulWidget {
+  @override
+  _SecondScreenState createState() => _SecondScreenState();
+}
+
+class _SecondScreenState extends State<SecondScreen> {
+  List<Widget> mainCard = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,16 +43,15 @@ class SecondScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     CardWidget(
-                      title: 'Whatsupp',
-                    ),
-                    CardWidget(
-                      title: 'Whatsupp',
-                    ),
-                    CardWidget(
-                      title: 'Whatsupp',
-                    ),
-                    CardWidget(
-                      title: 'Whatsupp',
+                      title: '',
+                      image: 'images/investment.jpg',
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    SecondScreen()));
+                      },
                     ),
                   ],
                 ),
@@ -55,6 +61,27 @@ class SecondScreen extends StatelessWidget {
         ]),
       ),
       bottomNavigationBar: kBottomNavyBar,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: new FloatingActionButton(
+        backgroundColor: Colors.deepOrangeAccent,
+        onPressed: () {
+          setState(() {
+            mainCard.add(
+              CardWidget(
+                title: 'Helloo',
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => SecondScreen()));
+                },
+              ),
+            );
+          });
+        },
+        tooltip: 'Increment',
+        child: new Icon(Icons.add),
+      ),
     );
   }
 }
