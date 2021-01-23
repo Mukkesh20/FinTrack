@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1093344119794",
+    "project_id": "thefluttersplitwise",
+    "storage_bucket": "thefluttersplitwise.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093344119794:android:163dec5735230b1d9f396b",
+        "android_client_info": {
+          "package_name": "com.deepblue.SplitBill"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093344119794-h17jhvfg49oq2t7u3sk3mreq84sm738m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmqJlY9gQHw1pu7Ov6MBu9eh00-h8v2CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093344119794-h17jhvfg49oq2t7u3sk3mreq84sm738m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
