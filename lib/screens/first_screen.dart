@@ -1,11 +1,5 @@
-import 'package:bill_split/main.dart';
-import 'package:bill_split/screens/login_page.dart';
 import 'package:bill_split/screens/second_screen.dart';
-import 'package:bill_split/services/auth-service/google_signin.dart';
-import 'package:bill_split/utilities/button_builder.dart';
-import 'package:bill_split/utilities/card_widget.dart';
-import 'package:bill_split/utilities/contants.dart';
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:bill_split/utilities/firstscreen_card_widget.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -67,13 +61,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     ),
                   ],
                 ),
-                onPressed: () {
-                  signOutGoogle();
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) {
-                    return MyApp();
-                  }), ModalRoute.withName('/'));
-                },
+                onPressed: () {},
               ),
             ),
           ],
@@ -95,8 +83,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        CardWidget(
-                          title: '',
+                        FirstCardWidget(
                           image: 'images/income.jpg',
                           onPressed: () {
                             Navigator.push(
@@ -106,8 +93,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                         SecondScreen()));
                           },
                         ),
-                        CardWidget(
-                          title: '',
+                        FirstCardWidget(
                           image: 'images/investment.jpg',
                           onPressed: () {
                             Navigator.push(
@@ -117,8 +103,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                         SecondScreen()));
                           },
                         ),
-                        CardWidget(
-                          title: '',
+                        FirstCardWidget(
                           image: 'images/debt.jpg',
                           onPressed: () {
                             Navigator.push(
@@ -139,9 +124,7 @@ class _FirstScreenState extends State<FirstScreen> {
             TabItem(
                 icon: Icons.account_balance_wallet_rounded, title: 'Balance'),
             TabItem(icon: Icons.home, title: 'Home'),
-            TabItem(
-                icon: Icons.person_rounded,
-                title: googleSignIn.currentUser.displayName),
+            TabItem(icon: Icons.person_rounded, title: 'Gajendra Singh'),
           ],
           initialActiveIndex: 1,
           backgroundColor: Colors.black87,

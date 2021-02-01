@@ -29,3 +29,40 @@ Widget roundButton({onPressed, buttonText, buttonIcon}) {
     ),
   );
 }
+
+Widget RoundedCard({buttonText, buttonIcon}) {
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          buttonIcon,
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(
+              children: [
+                Text(
+                  buttonText,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
+                ),
+                Text(
+                  buttonText,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    ),
+  );
+}

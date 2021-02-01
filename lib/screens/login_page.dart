@@ -1,5 +1,4 @@
 import '../screens/first_screen.dart';
-import '../services/auth-service/google_signin.dart';
 import 'package:flutter/material.dart';
 import '../utilities/button_builder.dart';
 
@@ -21,19 +20,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               SizedBox(height: 50),
               roundButton(
-                onPressed: () {
-                  signInWithGoogle().then((result) {
-                    if (result != null) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return FirstScreen();
-                          },
-                        ),
-                      );
-                    }
-                  });
-                },
+                onPressed: () {},
                 buttonText: 'Sign in with Google',
                 buttonIcon: Image(
                     image: AssetImage("assets/google_logo.png"), height: 35.0),
