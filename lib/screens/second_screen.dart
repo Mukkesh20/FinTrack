@@ -1,7 +1,11 @@
-import 'package:bill_split/utilities/popup_form_datatable.dart';
+import 'package:bill_split/utilities/database/core/database.dart';
+import 'package:bill_split/utilities/database/modal/tabledata_modal.dart';
 import 'package:bill_split/utilities/secondscreen_card_widget.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SecondScreen extends StatefulWidget {
   @override
@@ -11,21 +15,220 @@ class SecondScreen extends StatefulWidget {
 class _SecondScreenState extends State<SecondScreen> {
   int totalInvested = 0;
   int totalValue = 0;
+  TextEditingController enterInvestmentName = new TextEditingController();
+  TextEditingController enterInvestedValue = new TextEditingController();
+  TextEditingController enterTotalValue = new TextEditingController();
 
-  @override
-  initState() {
-    super.initState();
+  getData() async {
+    // await DropdownTableDataDatabaseProvider.db.addDropdownTableDataToDatabase(
+    //   new DropdownTableData(
+    //     name: enterInvestmentName.text,
+    //     invested: int.parse(enterInvestedValue.text),
+    //     value: int.parse(enterTotalValue.text),
+    //   ),
+    // );
+    var data =
+        await DropdownTableDataDatabaseProvider.db.getAllDropdownTableData();
+    data.forEach((row) => print(row.invested));
+
+    data.forEach(
+      (row) => dataRow1.add(
+        DataRow(
+          cells: <DataCell>[
+            DataCell(
+              Text(row.name),
+            ),
+            DataCell(Text(row.invested.toString())),
+            DataCell(Text(row.value.toString())),
+            DataCell(
+              Icon(Icons.edit),
+            ),
+            DataCell(
+              Icon(
+                Icons.close_rounded,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    setState(() {
+      updateSum(dataRow1);
+    });
+
+    print(data.length);
+  }
+
+//   showDialog(
+//   builder: (_) => Dialog(
+//   child: Column(
+//   children: <Widget>[
+//   TextField(
+//   decoration: InputDecoration(hintText: "Name"),
+//   controller: enterInvestmentName,
+//   ),
+//   TextField(
+//   decoration: InputDecoration(hintText: "Investment"),
+//   controller: enterInvestedValue,
+//   ),
+//   TextField(
+//   decoration: InputDecoration(hintText: "Value"),
+//   controller: enterTotalValue,
+//   ),
+//   FlatButton(
+//   child: Text("Save"),
+//   onPressed: () async {
+//   await DropdownTableDataDatabaseProvider.db
+//       .addDropdownTableDataToDatabase(
+//   new DropdownTableData(
+//   name: enterInvestmentName.text,
+//   invested: int.parse(enterInvestedValue.text),
+//   value: int.parse(enterTotalValue.text),
+//   ),
+//   );
+//   setState(() {
+//   dataRow.add(
+//   DataRow(
+//   cells: <DataCell>[
+//   DataCell(
+//   Text(enterInvestmentName.text),
+//   ),
+//   DataCell(Text(enterInvestedValue.text)),
+//   DataCell(Text(enterTotalValue.text)),
+//   DataCell(
+//   Icon(Icons.edit),
+//   ),
+//   DataCell(
+//   Icon(
+//   Icons.close_rounded,
+//   ),
+//   ),
+//   ],
+//   ),
+//   );
+//   updateSum(dataRow);
+//   });
+//   Navigator.pop(context);
+// },
+// )
+// ],
+// ),
+// ),
+// context: context);
+
+  addDataRow(List<DataRow> dataRow, context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)), //this right here
+            child: Container(
+              height: 275,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: "Name",
+                      ),
+                      controller: enterInvestmentName,
+                    ),
+                    TextField(
+                      decoration: InputDecoration(hintText: "Investment"),
+                      controller: enterInvestedValue,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                    ),
+                    TextField(
+                      decoration: InputDecoration(hintText: "Value"),
+                      controller: enterTotalValue,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: RaisedButton(
+                        onPressed: () async {
+                          await DropdownTableDataDatabaseProvider.db
+                              .addDropdownTableDataToDatabase(
+                            new DropdownTableData(
+                              name: enterInvestmentName.text,
+                              invested: int.parse(enterInvestedValue.text),
+                              value: int.parse(enterTotalValue.text),
+                            ),
+                          );
+                          setState(() {
+                            dataRow.add(
+                              DataRow(
+                                cells: <DataCell>[
+                                  DataCell(
+                                    Text(enterInvestmentName.text),
+                                  ),
+                                  DataCell(Text(enterInvestedValue.text)),
+                                  DataCell(Text(enterTotalValue.text)),
+                                  DataCell(
+                                    Icon(Icons.edit),
+                                  ),
+                                  DataCell(
+                                    Icon(
+                                      Icons.close_rounded,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                            updateSum(dataRow);
+                          });
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Save",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: const Color(0xFF1BC0C5),
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: Colors.redAccent,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  updateSum(List<DataRow> dataRow) {
     totalInvested = 0;
     totalValue = 0;
-    for (int i = 0; i < dataRow1.length; i++) {
-      totalInvested = int.parse(dataRow1[i]
+    for (int i = 0; i < dataRow.length; i++) {
+      totalInvested = int.parse(dataRow[i]
               .cells[1]
               .child
               .toString()
               .replaceAll('Text("', '')
               .replaceAll('")', '')) +
           totalInvested;
-      totalValue = int.parse(dataRow1[i]
+      totalValue = int.parse(dataRow[i]
               .cells[2]
               .child
               .toString()
@@ -33,118 +236,20 @@ class _SecondScreenState extends State<SecondScreen> {
               .replaceAll('")', '')) +
           totalValue;
     }
+    enterInvestmentName = new TextEditingController();
+    enterInvestedValue = new TextEditingController();
+    enterTotalValue = new TextEditingController();
   }
 
-  List<DataRow> dataRow1 = [
-    DataRow(
-      cells: <DataCell>[
-        DataCell(
-          Text('Tata Motors'),
-        ),
-        DataCell(Text('5000')),
-        DataCell(Text('5200')),
-        DataCell(
-          Icon(Icons.edit),
-        ),
-        DataCell(
-          Icon(
-            Icons.close_rounded,
-          ),
-        ),
-      ],
-    ),
-    DataRow(
-      cells: <DataCell>[
-        DataCell(
-          Text('IT ETF'),
-        ),
-        DataCell(Text('5000')),
-        DataCell(Text('5800')),
-        DataCell(
-          Icon(Icons.edit),
-        ),
-        DataCell(
-          Icon(
-            Icons.close_rounded,
-          ),
-        ),
-      ],
-    ),
-  ];
+  @override
+  initState() {
+    getData();
+    super.initState();
+  }
 
-  List<DataRow> dataRow2 = [
-    DataRow(
-      cells: <DataCell>[
-        DataCell(
-          Text('Tata Motors'),
-        ),
-        DataCell(Text('5000')),
-        DataCell(Text('5200')),
-        DataCell(
-          Icon(Icons.edit),
-        ),
-        DataCell(
-          Icon(
-            Icons.close_rounded,
-          ),
-        ),
-      ],
-    ),
-    DataRow(
-      cells: <DataCell>[
-        DataCell(
-          Text('IT ETF'),
-        ),
-        DataCell(Text('5000')),
-        DataCell(Text('5800')),
-        DataCell(
-          Icon(Icons.edit),
-        ),
-        DataCell(
-          Icon(
-            Icons.close_rounded,
-          ),
-        ),
-      ],
-    ),
-  ];
-
-  List<DataRow> dataRow3 = [
-    DataRow(
-      cells: <DataCell>[
-        DataCell(
-          Text('Tata Motors'),
-        ),
-        DataCell(Text('5000')),
-        DataCell(Text('5200')),
-        DataCell(
-          Icon(Icons.edit),
-        ),
-        DataCell(
-          Icon(
-            Icons.close_rounded,
-          ),
-        ),
-      ],
-    ),
-    DataRow(
-      cells: <DataCell>[
-        DataCell(
-          Text('IT ETF'),
-        ),
-        DataCell(Text('5000')),
-        DataCell(Text('5800')),
-        DataCell(
-          Icon(Icons.edit),
-        ),
-        DataCell(
-          Icon(
-            Icons.close_rounded,
-          ),
-        ),
-      ],
-    ),
-  ];
+  List<DataRow> dataRow1 = [];
+  List<DataRow> dataRow2 = [];
+  List<DataRow> dataRow3 = [];
 
   @override
   Widget build(BuildContext context) {
@@ -206,46 +311,7 @@ class _SecondScreenState extends State<SecondScreen> {
                               .toStringAsFixed(2),
                       dataRow: dataRow1,
                       onPressed: () {
-                        setState(() {
-                          dataRow1.add(
-                            DataRow(
-                              cells: <DataCell>[
-                                DataCell(
-                                  Text('Sarah'),
-                                ),
-                                DataCell(Text('10000')),
-                                DataCell(Text('12000')),
-                                DataCell(
-                                  Icon(Icons.edit),
-                                ),
-                                DataCell(
-                                  Icon(
-                                    Icons.close_rounded,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                          totalInvested = 0;
-                          totalValue = 0;
-                          for (int i = 0; i < dataRow1.length; i++) {
-                            totalInvested = int.parse(dataRow1[i]
-                                    .cells[1]
-                                    .child
-                                    .toString()
-                                    .replaceAll('Text("', '')
-                                    .replaceAll('")', '')) +
-                                totalInvested;
-                            totalValue = int.parse(dataRow1[i]
-                                    .cells[2]
-                                    .child
-                                    .toString()
-                                    .replaceAll('Text("', '')
-                                    .replaceAll('")', '')) +
-                                totalValue;
-                          }
-                          print(totalInvested);
-                        });
+                        addDataRow(dataRow1, context);
                       },
                     ),
                     SecondCardWidget(
@@ -255,6 +321,9 @@ class _SecondScreenState extends State<SecondScreen> {
                       profitLoss:
                           (((totalValue - totalInvested) / totalInvested) * 100)
                               .toStringAsFixed(2),
+                      onPressed: () {
+                        addDataRow(dataRow2, context);
+                      },
                       dataRow: dataRow2,
                     ),
                     SecondCardWidget(
@@ -265,6 +334,9 @@ class _SecondScreenState extends State<SecondScreen> {
                           (((totalValue - totalInvested) / totalInvested) * 100)
                               .toStringAsFixed(2),
                       dataRow: dataRow3,
+                      onPressed: () {
+                        addDataRow(dataRow3, context);
+                      },
                     ),
                   ],
                 ),
@@ -285,27 +357,14 @@ class _SecondScreenState extends State<SecondScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: new FloatingActionButton(
         backgroundColor: Colors.deepOrangeAccent,
-        onPressed: () {
+        onPressed: () async {
+          await DropdownTableDataDatabaseProvider.db
+              .deleteAllDropdownTableData();
           setState(() {
-            dataRow1.add(
-              DataRow(
-                cells: <DataCell>[
-                  DataCell(
-                    Text('Sarah'),
-                  ),
-                  DataCell(Text('100')),
-                  DataCell(Text('120')),
-                  DataCell(
-                    Icon(Icons.edit),
-                  ),
-                  DataCell(
-                    Icon(
-                      Icons.close_rounded,
-                    ),
-                  ),
-                ],
-              ),
-            );
+            dataRow1 = [];
+            dataRow2 = [];
+            dataRow3 = [];
+            updateSum(dataRow1);
           });
         },
         tooltip: 'Increment',
