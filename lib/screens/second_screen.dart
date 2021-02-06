@@ -59,64 +59,7 @@ class _SecondScreenState extends State<SecondScreen> {
     print(data.length);
   }
 
-//   showDialog(
-//   builder: (_) => Dialog(
-//   child: Column(
-//   children: <Widget>[
-//   TextField(
-//   decoration: InputDecoration(hintText: "Name"),
-//   controller: enterInvestmentName,
-//   ),
-//   TextField(
-//   decoration: InputDecoration(hintText: "Investment"),
-//   controller: enterInvestedValue,
-//   ),
-//   TextField(
-//   decoration: InputDecoration(hintText: "Value"),
-//   controller: enterTotalValue,
-//   ),
-//   FlatButton(
-//   child: Text("Save"),
-//   onPressed: () async {
-//   await DropdownTableDataDatabaseProvider.db
-//       .addDropdownTableDataToDatabase(
-//   new DropdownTableData(
-//   name: enterInvestmentName.text,
-//   invested: int.parse(enterInvestedValue.text),
-//   value: int.parse(enterTotalValue.text),
-//   ),
-//   );
-//   setState(() {
-//   dataRow.add(
-//   DataRow(
-//   cells: <DataCell>[
-//   DataCell(
-//   Text(enterInvestmentName.text),
-//   ),
-//   DataCell(Text(enterInvestedValue.text)),
-//   DataCell(Text(enterTotalValue.text)),
-//   DataCell(
-//   Icon(Icons.edit),
-//   ),
-//   DataCell(
-//   Icon(
-//   Icons.close_rounded,
-//   ),
-//   ),
-//   ],
-//   ),
-//   );
-//   updateSum(dataRow);
-//   });
-//   Navigator.pop(context);
-// },
-// )
-// ],
-// ),
-// ),
-// context: context);
-
-  addDataRow(List<DataRow> dataRow, context) {
+  addDataRow(List<DataRow> dataRow, context, String cardname) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -160,6 +103,7 @@ class _SecondScreenState extends State<SecondScreen> {
                           await DropdownTableDataDatabaseProvider.db
                               .addDropdownTableDataToDatabase(
                             new DropdownTableData(
+                              cardName: cardname,
                               name: enterInvestmentName.text,
                               invested: int.parse(enterInvestedValue.text),
                               value: int.parse(enterTotalValue.text),
@@ -311,7 +255,7 @@ class _SecondScreenState extends State<SecondScreen> {
                               .toStringAsFixed(2),
                       dataRow: dataRow1,
                       onPressed: () {
-                        addDataRow(dataRow1, context);
+                        addDataRow(dataRow1, context, 'STOCKS');
                       },
                     ),
                     SecondCardWidget(
@@ -322,7 +266,7 @@ class _SecondScreenState extends State<SecondScreen> {
                           (((totalValue - totalInvested) / totalInvested) * 100)
                               .toStringAsFixed(2),
                       onPressed: () {
-                        addDataRow(dataRow2, context);
+                        addDataRow(dataRow2, context, 'MUTUAL FUNDS');
                       },
                       dataRow: dataRow2,
                     ),
@@ -335,7 +279,7 @@ class _SecondScreenState extends State<SecondScreen> {
                               .toStringAsFixed(2),
                       dataRow: dataRow3,
                       onPressed: () {
-                        addDataRow(dataRow3, context);
+                        addDataRow(dataRow3, context, 'CRYPTO');
                       },
                     ),
                   ],
@@ -359,7 +303,7 @@ class _SecondScreenState extends State<SecondScreen> {
         backgroundColor: Colors.deepOrangeAccent,
         onPressed: () async {
           await DropdownTableDataDatabaseProvider.db
-              .deleteAllDropdownTableData();
+              .dropTableIfExistsThenReCreate();
           setState(() {
             dataRow1 = [];
             dataRow2 = [];

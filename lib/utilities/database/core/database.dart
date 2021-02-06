@@ -25,6 +25,8 @@ class DropdownTableDataDatabaseProvider {
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE DropdownTableData ("
+          "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+          "cardName TEXT,"
           "name TEXT,"
           "invested integer,"
           "value integer"
@@ -51,10 +53,11 @@ class DropdownTableDataDatabaseProvider {
     return response;
   }
 
-  Future<DropdownTableData> getDropdownTableDataWithId(String name) async {
+  Future<DropdownTableData> getDropdownTableDataWithName(
+      String cardName, String name) async {
     final db = await database;
-    var response = await db
-        .query("DropdownTableData", where: "name = ?", whereArgs: [name]);
+    var response = await db.query("DropdownTableData",
+        where: "cardName = ?, name = ?", whereArgs: [cardName, name]);
     return response.isNotEmpty
         ? DropdownTableData.fromMap(response.first)
         : null;
@@ -76,5 +79,13 @@ class DropdownTableDataDatabaseProvider {
   deleteAllDropdownTableData() async {
     final db = await database;
     db.delete("DropdownTableData");
+  }
+
+  Future<void> dropTableIfExistsThenReCreate() async {
+    final db = await database;
+
+    //here we execute a query to drop the table if exists which is called "tableName"
+    //and could be given as method's input parameter too
+    await db.execute("DROP TABLE IF EXISTS DropdownTableData");
   }
 }
